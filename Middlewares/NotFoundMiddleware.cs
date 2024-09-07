@@ -19,7 +19,6 @@ public class NotFoundMiddleware
         if (context.Response.StatusCode == StatusCodes.Status404NotFound)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = StatusCodes.Status200OK; // Cambiamos el código de estado a 200 para enviar la respuesta JSON.
 
             var routes = endpointDataSource.Endpoints
                 .OfType<RouteEndpoint>()
@@ -30,11 +29,13 @@ public class NotFoundMiddleware
                 })
                 .ToList();
 
-            await context.Response.WriteAsJsonAsync(new
+            var response = new
             {
                 Message = "La ruta solicitada no existe. Aquí están las rutas disponibles:",
                 AvailableRoutes = routes
-            });
+            };
+
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 }

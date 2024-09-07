@@ -34,3 +34,7 @@ D:\C#\Coink\UserRegistryAPI\obj\Debug\net8.0\UserRegistryAPI.genruntimeconfig.ca
 D:\C#\Coink\UserRegistryAPI\obj\Debug\net8.0\ref\UserRegistryAPI.dll
 D:\C#\Coink\UserRegistryAPI\bin\Debug\net8.0\Dapper.dll
 D:\C#\Coink\UserRegistryAPI\bin\Debug\net8.0\CsvHelper.dll
+D:\C#\Coink\UserRegistryAPI\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+D:\C#\Coink\UserRegistryAPI\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\C#\Coink\UserRegistryAPI\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\C#\Coink\UserRegistryAPI\bin\Debug\net8.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

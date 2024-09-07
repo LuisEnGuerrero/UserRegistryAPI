@@ -1,5 +1,6 @@
 using UserRegistryAPI.Data;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,10 @@ builder.Services.AddSingleton<DatabaseConfig>();
 
 // Registrar DatabaseSetupService como un servicio
 builder.Services.AddSingleton<DatabaseSetupService>();
+
+// Agregar el servicio de contexto de base de datos
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
@@ -54,9 +59,16 @@ using (var scope = app.Services.CreateScope())
     databaseSetupService.InitializeDatabase();
 
     // Agregar países desde archivo CSV utilizando DataLoaders CountryLoader
-    var databaseConfig = scope.ServiceProvider.GetRequiredService<DatabaseConfig>();
-    var countryLoader = new CountryLoader(databaseConfig);
-    await countryLoader.LoadCountriesAsync("Data/countries.csv");
+    //var databaseConfig = scope.ServiceProvider.GetRequiredService<DatabaseConfig>();
+    //var countryLoader = new CountryLoader(databaseConfig);
+    //await countryLoader.LoadCountriesAsync("Data/pais.csv");
+
+    // Realizar las migraciones de la base de datos solo en el modo de desarrollo
+    if (app.Environment.IsDevelopment())
+    {
+        var databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+        databaseContext.Database.Migrate();
+    }
 }
 
 app.Run();
