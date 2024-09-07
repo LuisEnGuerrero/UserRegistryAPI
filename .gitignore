@@ -1,0 +1,36 @@
+# Archivos de configuración de usuario
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Archivos de compilación
+bin/
+obj/
+
+# Archivos de dependencias
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Archivos de configuración de entorno
+.env
+.env.*
+
+# Archivos de logs
+*.log
+logs/
+
+# Archivos de publicación
+publish/
+wwwroot/
+
+# Archivos de configuración de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de contenedores
+docker-compose.override.yml
