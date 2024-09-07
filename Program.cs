@@ -40,6 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UseMiddleware<NotFoundMiddleware>(); //Este middleware presenta las rutas definidas en la API al Solicitante.
+
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
