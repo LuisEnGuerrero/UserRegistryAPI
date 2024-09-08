@@ -114,39 +114,94 @@ namespace UserRegistryAPI.Controllers
 
         private void LoadDepartmentsData(string filePath)
         {
-            using var reader = new StreamReader(filePath);
-            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            try
             {
-                Delimiter = ";",
-                HasHeaderRecord = true
-            };
-            using var csv = new CsvReader(reader, csvConfig);
-            var records = csv.GetRecords<Department>().ToList();
-            foreach (var record in records)
-            {
-                if (!_context.Departments.Any(d => d.Name == record.Name && d.CountryId == record.CountryId))
+                using var reader = new StreamReader(filePath);
+                var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
-                    _context.Departments.Add(record);
+                    Delimiter = ";",
+                    HasHeaderRecord = false // Cambiar a true si tu CSV tiene encabezados
+                };
+
+                using var csv = new CsvReader(reader, csvConfig);
+
+                // Leer los registros del CSV
+                var records = csv.GetRecords<dynamic>().ToList();
+
+                foreach (var record in records)
+                {
+                    // Extraer los valores del CSV
+                    var recordDict = record as IDictionary<string, object>;
+                    var departmentName = recordDict.Values.ElementAtOrDefault(0)?.ToString() ?? string.Empty;
+                    var countryId = int.Parse(recordDict.Values.ElementAt(1)?.ToString() ?? "0");
+
+                    if (!string.IsNullOrWhiteSpace(departmentName) && countryId > 0)
+                    {
+                        // Verifica si ya existe un departamento con el mismo nombre y CountryId
+                        if (!_context.Departments.Any(d => d.Name == departmentName && d.CountryId == countryId))
+                        {
+                            _context.Departments.Add(new Department
+                            {
+                                Name = departmentName,  // Mapea el nombre a la propiedad Name
+                                CountryId = countryId   // Mapea pais_id a la propiedad CountryId
+                            });
+                        }
+                    }
                 }
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // Registrar y mostrar el error para depuración
+                Console.WriteLine($"Error al cargar datos de departamentos: {ex.Message}");
+                throw;
             }
         }
 
+
         private void LoadCitiesData(string filePath)
         {
-            using var reader = new StreamReader(filePath);
-            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            try
             {
-                Delimiter = ";",
-                HasHeaderRecord = true
-            };
-            using var csv = new CsvReader(reader, csvConfig);
-            var records = csv.GetRecords<Municipality>().ToList();
-            foreach (var record in records)
-            {
-                if (!_context.Municipalities.Any(c => c.Name == record.Name && c.DepartmentId == record.DepartmentId))
+                using var reader = new StreamReader(filePath);
+                var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
-                    _context.Municipalities.Add(record);
+                    Delimiter = ";",
+                    HasHeaderRecord = true // Cambiar a true si tu CSV tiene encabezados
+                };
+
+                using var csv = new CsvReader(reader, csvConfig);
+                var records = csv.GetRecords<dynamic>().ToList();
+
+                foreach (var record in records)
+                {
+                    // Extraer los valores del CSV
+                    var recordDict = record as IDictionary<string, object>;
+                    var cityName = recordDict.Values.ElementAtOrDefault(0)?.ToString() ?? string.Empty;
+                    var departmentId = int.Parse(recordDict.Values.ElementAt(1)?.ToString() ?? "0");
+
+                    if (!string.IsNullOrWhiteSpace(cityName) && departmentId > 0)
+                    {
+                        // Verifica si ya existe un municipio con el mismo nombre y DepartmentId
+                        if (!_context.Municipalities.Any(c => c.Name == cityName && c.DepartmentId == departmentId))
+                        {
+                            _context.Municipalities.Add(new Municipality
+                            {
+                                Name = cityName,     // Mapea el nombre a la propiedad Name
+                                DepartmentId = departmentId   // Mapea department_id a la propiedad DepartmentId
+                            });
+                        }
+                    }
                 }
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // Registrar y mostrar el error para depuración
+                Console.WriteLine($"Error al cargar datos de municipios: {ex.Message}");
+                throw;
             }
         }
 

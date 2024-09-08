@@ -50,6 +50,11 @@ namespace UserRegistryAPI.Data
                 .Property(d => d.Name)
                 .HasColumnName("nombre"); // Especifica el nombre de la columna en la base de datos
 
+            // Aquí se agrega la configuración para el mapeo de CountryId
+            modelBuilder.Entity<Department>()
+                .Property(d => d.CountryId)
+                .HasColumnName("pais_id"); // Ajusta este nombre según sea necesario
+
             modelBuilder.Entity<Department>()
                 .HasMany(d => d.Municipalities)
                 .WithOne(m => m.Department)
@@ -68,6 +73,10 @@ namespace UserRegistryAPI.Data
             modelBuilder.Entity<Municipality>()
                 .Property(m => m.Name)
                 .HasColumnName("nombre"); // Especifica el nombre de la columna en la base de datos
+
+            modelBuilder.Entity<Municipality>()
+                .Property(m => m.DepartmentId)
+                .HasColumnName("departamento_id");
 
             // Configuración de la entidad User
             modelBuilder.Entity<User>()
@@ -89,6 +98,19 @@ namespace UserRegistryAPI.Data
             modelBuilder.Entity<User>()
                 .Property(u => u.Address)
                 .HasColumnName("direccion"); // Especifica el nombre de la columna en la base de datos
+            
+            modelBuilder.Entity<User>()
+                .Property(u => u.CountryId)
+                .HasColumnName("pais_id");  // Especifica el nombre de la columna en la base de datos
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.DepartmentId)
+                .HasColumnName("departamento_id");  // Especifica el nombre de la columna en la base de datos
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.MunicipalityId)
+                .HasColumnName("municipio_id");  // Especifica el nombre de la columna en la base de datos
+
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Country)
