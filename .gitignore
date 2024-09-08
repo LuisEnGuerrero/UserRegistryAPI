@@ -34,3 +34,6 @@ Thumbs.db
 
 # Archivos de configuración de contenedores
 docker-compose.override.yml
+
+# Archivos de Test solo en desarrollo
+DataLoaders/

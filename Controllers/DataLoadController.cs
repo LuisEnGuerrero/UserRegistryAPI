@@ -7,6 +7,8 @@ using UserRegistryAPI.Models;
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
+using Microsoft.Extensions.Configuration;
+
 
 namespace UserRegistryAPI.Controllers
 {
@@ -15,12 +17,15 @@ namespace UserRegistryAPI.Controllers
     public class DataLoadController : ControllerBase
     {
         private readonly DatabaseContext _context;
-        private readonly string _securityKey = "vFUEHrFQdPlvE1mCpn9I5LMKwzBdNC3BJuUafsC1LC4"; // Key definida
+        private readonly string _securityKey;
 
-        public DataLoadController(DatabaseContext context)
+        public DataLoadController(DatabaseContext context, IConfiguration configuration)
         {
             _context = context;
+            _securityKey = configuration["KEY_SEND_DATA_CSV"] ?? throw new ArgumentNullException("KEY_SEND_DATA_CSV not found in environment variables");
         }
+
+
 
         [HttpGet("cargardatos")]
         public IActionResult LoadData([FromQuery] string key)
