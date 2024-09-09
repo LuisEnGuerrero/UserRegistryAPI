@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Usuario</title>
+</head>
+<body>
+    <h1>Crear Nuevo Usuario</h1>
+    <form id="userForm">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="phone">Teléfono:</label>
+        <input type="text" id="phone" name="phone"><br><br>
+        <label for="address">Dirección:</label>
+        <input type="text" id="address" name="address"><br><br>
+        <label for="countryId">ID del País:</label>
+        <input type="number" id="countryId" name="countryId"><br><br>
+        <label for="departmentId">ID del Departamento:</label>
+        <input type="number" id="departmentId" name="departmentId"><br><br>
+        <label for="municipalityId">ID de la Municipalidad:</label>
+        <input type="number" id="municipalityId" name="municipalityId"><br><br>
+        <button type="submit">Crear Usuario</button>
+    </form>
+
+    <script>
+        document.getElementById("userForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const data = {
+                name: document.getElementById("name").value,
+                phone: document.getElementById("phone").value,
+                address: document.getElementById("address").value,
+                countryId: document.getElementById("countryId").value,
+                departmentId: document.getElementById("departmentId").value,
+                municipalityId: document.getElementById("municipalityId").value
+            };
+
+            fetch("http://localhost:5000/api/user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => alert("Usuario creado exitosamente"))
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>

@@ -1,17 +1,19 @@
-CREATE OR REPLACE PROCEDURE sp_get_user_by_id(
-    IN p_id INT,
-    OUT p_nombre VARCHAR,
-    OUT p_telefono VARCHAR,
-    OUT p_direccion VARCHAR,
-    OUT p_pais_id INT,
-    OUT p_departamento_id INT,
-    OUT p_municipio_id INT
+-- Función para obtener un usuario por su ID
+CREATE OR REPLACE FUNCTION sp_get_user_by_id(
+    p_id INT
 )
-LANGUAGE plpgsql AS $$
+RETURNS SETOF usuario AS $$
 BEGIN
-    SELECT nombre, telefono, direccion, pais_id, departamento_id, municipio_id
-    INTO p_nombre, p_telefono, p_direccion, p_pais_id, p_departamento_id, p_municipio_id
+    RETURN QUERY 
+    SELECT 
+        id, 
+        nombre AS name,          -- Usamos alias aquí también
+        telefono AS phone, 
+        direccion AS address, 
+        pais_id AS countryId, 
+        departamento_id AS departmentId, 
+        municipio_id AS municipalityId
     FROM usuario
     WHERE id = p_id;
 END;
-$$;
+$$ LANGUAGE plpgsql;

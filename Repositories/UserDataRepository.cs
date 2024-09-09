@@ -61,7 +61,7 @@ public class UserDataRepository
                     cmd.Parameters.AddWithValue("p_id", user.Id);
                     cmd.Parameters.AddWithValue("p_nombre", user.Name);
                     cmd.Parameters.AddWithValue("p_telefono", user.Phone);
-                    cmd.Parameters.AddWithValue("p_direccion", user.Address);
+                    cmd.Parameters.AddWithValue("p_direccion", user.Address?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("p_pais_id", user.CountryId);
                     cmd.Parameters.AddWithValue("p_departamento_id", user.DepartmentId);
                     cmd.Parameters.AddWithValue("p_municipio_id", user.MunicipalityId);

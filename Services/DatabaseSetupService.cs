@@ -35,6 +35,42 @@ public class DatabaseSetupService
             {
                 Console.WriteLine("Las tablas ya existen. No se requiere creación.");
             }
+
+            // Cargar los procedimientos almacenados
+            CargarProcedimientos(connection);
+        }
+
+    }
+
+    // Método para cargar múltiples procedimientos almacenados
+    private void CargarProcedimientos(NpgsqlConnection connection)
+    {
+        CargarProcedimientoSiNoExiste(connection, "sp_create_user", "StoredProcedures/sp_create_user.sql");
+        CargarProcedimientoSiNoExiste(connection, "sp_get_all_users", "StoredProcedures/sp_get_all_users.sql");
+        CargarProcedimientoSiNoExiste(connection, "sp_get_user_by_id", "StoredProcedures/sp_get_user_by_id.sql");
+        CargarProcedimientoSiNoExiste(connection, "sp_delete_user", "StoredProcedures/sp_delete_user.sql");
+        CargarProcedimientoSiNoExiste(connection, "sp_update_user", "StoredProcedures/sp_update_user.sql");
+    }
+
+
+        // Verificar si los procedimientos almacenados ya existen y sino cargarlos
+        private void CargarProcedimientoSiNoExiste(NpgsqlConnection connection, string procedureName, string scriptPath)
+    {
+        var checkProcedureCommand = new NpgsqlCommand(
+            $"SELECT EXISTS (SELECT 1 FROM pg_proc WHERE proname = '{procedureName}');",
+            connection);
+        var procedureExists = checkProcedureCommand.ExecuteScalar() as bool?;
+
+        if (!procedureExists.HasValue || !procedureExists.Value)
+        {
+            var createProcedureScript = File.ReadAllText(scriptPath);
+            var createProcedureCommand = new NpgsqlCommand(createProcedureScript, connection);
+            createProcedureCommand.ExecuteNonQuery();
+            Console.WriteLine($"Procedimiento almacenado '{procedureName}' creado exitosamente.");
+        }
+        else
+        {
+            Console.WriteLine($"El procedimiento almacenado '{procedureName}' ya existe.");
         }
     }
 }

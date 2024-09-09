@@ -1,13 +1,14 @@
-CREATE OR REPLACE PROCEDURE sp_update_user(
-    IN p_id INT,
-    IN p_nombre VARCHAR,
-    IN p_telefono VARCHAR,
-    IN p_direccion VARCHAR,
-    IN p_pais_id INT,
-    IN p_departamento_id INT,
-    IN p_municipio_id INT
+-- Procedimiento para actualizar un usuario
+CREATE OR REPLACE FUNCTION sp_update_user(
+    p_id INT,
+    p_nombre TEXT,
+    p_telefono TEXT,
+    p_direccion TEXT,
+    p_pais_id INT,
+    p_departamento_id INT,
+    p_municipio_id INT
 )
-LANGUAGE plpgsql AS $$
+RETURNS VOID AS $$
 BEGIN
     UPDATE usuario
     SET nombre = p_nombre,
@@ -18,4 +19,4 @@ BEGIN
         municipio_id = p_municipio_id
     WHERE id = p_id;
 END;
-$$;
+$$ LANGUAGE plpgsql;
