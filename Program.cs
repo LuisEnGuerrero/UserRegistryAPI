@@ -55,7 +55,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+    options =>
+    {
+        options.SwaggerDoc("v1", new() { Title = "User Registry API", Version = "v1" });
+    }
+);
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -64,7 +69,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(
+        options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "User Registry API v1");
+        }
+    );
     app.UseDeveloperExceptionPage();
 }
 

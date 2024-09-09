@@ -15,3 +15,4 @@ fetch("http://localhost:5001/api/user", {
 .then(response => response.json())
 .then(data => console.log(data))
 .catch(error => console.error("Error:", error));
+
