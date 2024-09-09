@@ -18,6 +18,18 @@ namespace UserRegistryAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
+            // Validar que los campos no estén vacíos o nulos
+            if (string.IsNullOrWhiteSpace(user.Name) || string.IsNullOrWhiteSpace(user.Phone))
+            {
+                return BadRequest("El nombre y teléfono son requeridos.");
+            }
+
+            // Validar que los IDs numéricos sean positivos
+            if (user.CountryId <= 0 || user.DepartmentId <= 0 || user.MunicipalityId <= 0)
+            {
+                return BadRequest("IDs de país, departamento y municipalidad deben ser mayores a cero.");
+            }
+
             try
             {
                 await _userService.CreateUserAsync(user);
@@ -50,6 +62,11 @@ namespace UserRegistryAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
+            if (id <= 0)
+            {
+                return BadRequest("El ID debe ser un número positivo.");
+            }
+
             try
             {
                 var user = await _userService.GetUserByIdAsync(id);
@@ -70,7 +87,19 @@ namespace UserRegistryAPI.Controllers
         {
             if (id != user.Id)
             {
-                return BadRequest("El ID del usuario no coincide.");
+                return BadRequest("El ID proporcionado no coincide con el ID del usuario.");
+            }
+
+            // Validar que los campos no estén vacíos o nulos
+            if (string.IsNullOrWhiteSpace(user.Name) || string.IsNullOrWhiteSpace(user.Phone))
+            {
+                return BadRequest("El nombre y teléfono son requeridos.");
+            }
+
+            // Validar que los IDs numéricos sean positivos
+            if (user.CountryId <= 0 || user.DepartmentId <= 0 || user.MunicipalityId <= 0)
+            {
+                return BadRequest("IDs de país, departamento y municipalidad deben ser mayores a cero.");
             }
 
             try
@@ -88,6 +117,11 @@ namespace UserRegistryAPI.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
+
+            if (id <= 0)
+            {
+                return BadRequest("El ID debe ser un número positivo.");
+            }
 
             if (user == null)
             {
