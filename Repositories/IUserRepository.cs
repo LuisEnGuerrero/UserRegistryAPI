@@ -1,26 +1,52 @@
 using UserRegistryAPI.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace UserRegistryAPI.Repositories
 {
+    /// <summary>
+    /// Interfaz para el repositorio de usuarios.
+    /// </summary>
     public interface IUserRepository
     {
-        // Método para crear un nuevo usuario
+        /// <summary>
+        /// Crea un nuevo usuario.
+        /// </summary>
         Task CreateUserAsync(User user);
 
-        // Métodos para verificar la existencia de país, departamento y municipalidad
+        /// <summary>
+        /// Verifica si un país existe.
+        /// </summary>
         Task<bool> CountryExistsAsync(int countryId);
+
+        /// <summary>
+        /// Verifica si un departamento existe.
+        /// </summary>
         Task<bool> DepartmentExistsAsync(int departmentId);
+
+        /// <summary>
+        /// Verifica si un municipio existe.
+        /// </summary>
         Task<bool> MunicipalityExistsAsync(int municipalityId);
 
-        // Métodos para leer usuarios (Read)
-        Task<IEnumerable<User>> GetAllUsersAsync();  // Obtener todos los usuarios
-        Task<User> GetUserByIdAsync(int id);         // Obtener un usuario por su ID
+        /// <summary>
+        /// Obtiene todos los usuarios.
+        /// </summary>
+        Task<IEnumerable<User>> GetAllUsersAsync();
 
-        // Método para actualizar un usuario (Update)
+        /// <summary>
+        /// Obtiene un usuario por ID.
+        /// </summary>
+        Task<User?> GetUserByIdAsync(int id);
+
+        /// <summary>
+        /// Actualiza un usuario existente.
+        /// </summary>
         Task UpdateUserAsync(User user);
 
-        // Método para eliminar un usuario (Delete)
+        /// <summary>
+        /// Elimina un usuario por ID.
+        /// </summary>
         Task DeleteUserAsync(int id);
- 
     }
 }
