@@ -1,15 +1,16 @@
 using Npgsql;
 using System;
 using System.IO;
+using UserRegistryAPI.Data;
 
 public class DatabaseSetupService
 {
     private readonly string _connectionString;
 
     // Constructor que recibe la cadena de conexión de la base de datos
-    public DatabaseSetupService(string connectionString)
+    public DatabaseSetupService(DatabaseConfig databaseConfig)
     {
-        _connectionString = connectionString;
+        _connectionString = databaseConfig.ConnectionString;
     }
 
     /// <summary>
@@ -60,8 +61,15 @@ public class DatabaseSetupService
         CargarProcedimientoSiNoExiste(connection, "sp_create_user", "StoredProcedures/sp_create_user.sql");
         CargarProcedimientoSiNoExiste(connection, "sp_get_all_users", "StoredProcedures/sp_get_all_users.sql");
         CargarProcedimientoSiNoExiste(connection, "sp_get_user_by_id", "StoredProcedures/sp_get_user_by_id.sql");
-        CargarProcedimientoSiNoExiste(connection, "sp_delete_user", "StoredProcedures/sp_delete_user.sql");
         CargarProcedimientoSiNoExiste(connection, "sp_update_user", "StoredProcedures/sp_update_user.sql");
+        CargarProcedimientoSiNoExiste(connection, "sp_delete_user", "StoredProcedures/sp_delete_user.sql");
+        CargarProcedimientoSiNoExiste(connection, "sp_get_auth_user_by_email", "StoredProcedures/sp_get_auth_user_by_email.sql"); // Stored Procedure para autenticación de usuarios
+        CargarProcedimientoSiNoExiste(connection, "sp_get_auth_user_by_google_id", "StoredProcedures/sp_get_auth_user_by_google_id.sql"); // Stored Procedure para autenticación de usuarios 
+        CargarProcedimientoSiNoExiste(connection, "sp_create_auth_user", "StoredProcedures/sp_create_auth_user.sql"); // Stored Procedure para autenticación de usuarios 
+        CargarProcedimientoSiNoExiste(connection, "sp_get_auth_user_by_id", "StoredProcedures/sp_get_auth_user_by_id.sql"); // Stored Procedure para autenticación de usuarios 
+        CargarProcedimientoSiNoExiste(connection, "sp_get_all_auth_users", "StoredProcedures/sp_get_all_auth_users.sql"); // Stored Procedure para autenticación de usuarios 
+        CargarProcedimientoSiNoExiste(connection, "sp_update_auth_user", "StoredProcedures/sp_update_auth_user.sql"); // Stored Procedure para autenticación de usuarios 
+        CargarProcedimientoSiNoExiste(connection, "sp_delete_auth_user", "StoredProcedures/sp_delete_auth_user.sql"); // Stored Procedure para autenticación de usuarios 
     }
 
     /// <summary>

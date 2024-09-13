@@ -28,7 +28,7 @@ namespace UserRegistryAPI.Controllers
         }
 
         /// <summary>
-        /// Método GET para cargar datos desde archivos CSV. Valida la clave de seguridad antes de proceder.
+        /// Cargar datos desde archivos CSV. Valida la clave de seguridad antes de proceder.
         /// </summary>
         /// <param name="key">Clave de seguridad para la carga de datos</param>
         /// <returns>Resultado de la carga de datos</returns>
@@ -80,6 +80,7 @@ namespace UserRegistryAPI.Controllers
                             break;
                         default:
                             // Archivo desconocido, no se procesa
+                            Console.WriteLine($"Archivo no reconocido: {fileName}, no se procesará.");
                             break;
                     }
                 }
@@ -151,7 +152,7 @@ namespace UserRegistryAPI.Controllers
                 var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
                     Delimiter = ";",
-                    HasHeaderRecord = false // Cambiar a true si el CSV tiene encabezados
+                    HasHeaderRecord = true
                 };
 
                 using var csv = new CsvReader(reader, csvConfig);
@@ -212,24 +213,18 @@ namespace UserRegistryAPI.Controllers
 
                 foreach (var record in records)
                 {
-                    // Verificar si 'record' se puede convertir a un diccionario
                     var recordDict = record as IDictionary<string, object>;
 
-                    // Verificar si 'recordDict' no es nulo antes de acceder a sus valores
                     if (recordDict != null)
                     {
-                        // Obtener el nombre de la ciudad (índice 0) y manejar posibles valores nulos
                         var cityNameValue = recordDict.Values.ElementAtOrDefault(0);
                         var cityName = cityNameValue != null ? cityNameValue.ToString() : string.Empty;
 
-                        // Obtener el ID del departamento (índice 1) y manejar posibles valores nulos
                         var departmentIdValue = recordDict.Values.ElementAtOrDefault(1);
                         var departmentId = departmentIdValue != null && int.TryParse(departmentIdValue.ToString(), out int parsedDepartmentId) ? parsedDepartmentId : 0;
 
-                        // Solo proceder si el nombre de la ciudad no está vacío y el departamento es válido
                         if (!string.IsNullOrWhiteSpace(cityName) && departmentId > 0)
                         {
-                            // Verificar si el municipio no existe ya en la base de datos antes de agregarlo
                             if (!_context.Municipalities.Any(c => c.Name == cityName && c.DepartmentId == departmentId))
                             {
                                 _context.Municipalities.Add(new Municipality
